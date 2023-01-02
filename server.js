@@ -5,6 +5,7 @@ const axios = require('axios');
 
 const app = express();
 const PORT = process.env.PORT || 90;
+
 app.use(cors({
     origin: '*'
 }));
@@ -16,6 +17,8 @@ const io = socket(server, {
         methods: ['GET', 'POST'],
     },
 });
+
+const IMDB_API_KEY = 'k_0eqrv7jn';
 
 const rooms = new Map();
 
@@ -60,10 +63,16 @@ app.get('/', (req, res) => {
 
 app.get('/get-top100-imdb', (req, res) => {
     // axios.get('https://raw.githubusercontent.com/sergesarapov/movie-night-api-mock/main/250.json')
-    axios.get('https://imdb-api.com/en/API/Top250Movies/k_0eqrv7jn')
+    axios.get(`https://imdb-api.com/en/API/Top250Movies/${IMDB_API_KEY}`)
         .then(({ data }) => {
             data.items.splice(100, Infinity);
             res.send(data.items);
         })
+        .catch((err) => console.log(err));
+});
+
+app.get('/get-most-popular-imdb', (req, res) => {
+    axios.get(`https://imdb-api.com/en/API/MostPopularMovies/${IMDB_API_KEY}`)
+        .then(({ data }) => res.send(data.items))
         .catch((err) => console.log(err));
 });
