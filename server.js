@@ -61,9 +61,9 @@ app.get('/', (req, res) => {
 app.get('/get-top100-imdb', (req, res) => {
     // axios.get('https://raw.githubusercontent.com/sergesarapov/movie-night-api-mock/main/250.json')
     axios.get('https://imdb-api.com/en/API/Top250Movies/k_0eqrv7jn')
-        .then((response) => {
-            response.items.splice(100, Infinity);
-            res.send(response.items);
+        .then(({ data }) => {
+            data.items.splice(100, Infinity);
+            res.send(data.items);
         })
         .catch((err) => console.log(err));
 });
