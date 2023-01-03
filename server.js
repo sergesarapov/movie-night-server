@@ -38,6 +38,8 @@ io.on('connection', (socket) => {
     socket.on('requested content', (roomId) => {
         if (rooms.has(roomId)) {
             io.to(roomId).emit('send content', rooms.get(roomId));
+        } else {
+            io.to(roomId).emit('room expired');
         }
     });
 
