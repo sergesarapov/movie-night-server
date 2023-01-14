@@ -72,14 +72,14 @@ app.get('/get-top100-imdb', (req, res) => {
     axios.get(`https://imdb-api.com/en/API/Top250Movies/${IMDB_API_KEY}`)
         .then(({ data }) => {
             data.items.splice(100, Infinity);
-            res.send(data.items);
+            res.send(data.items.length ? data.items : data.errorMessage);
         })
         .catch((err) => console.log(err));
 });
 
 app.get('/get-most-popular-imdb', (req, res) => {
     axios.get(`https://imdb-api.com/en/API/MostPopularMovies/${IMDB_API_KEY}`)
-        .then(({ data }) => res.send(data.items))
+        .then(({ data }) => res.send(data.items.length ? data.items : data.errorMessage))
         .catch((err) => console.log(err));
 });
 
