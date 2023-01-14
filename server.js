@@ -63,6 +63,11 @@ app.get('/', (req, res) => {
     res.send('success!');
 });
 
+axios.interceptors.request.use(request => {
+    console.log('Starting Request', JSON.stringify(request, null, 2))
+    return request
+})
+
 app.get('/get-top100-imdb', (req, res) => {
     // axios.get('https://raw.githubusercontent.com/sergesarapov/movie-night-api-mock/main/250.json')
     axios.get(`https://imdb-api.com/en/API/Top250Movies/${IMDB_API_KEY}`)
