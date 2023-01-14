@@ -18,7 +18,7 @@ const io = socket(server, {
     },
 });
 
-const IMDB_API_KEY = 'k_0eqrv7jn';
+const IMDB_API_KEY = 'pk_ukg63o59ojga0st7v'; //public API key
 
 const rooms = new Map();
 
