@@ -27,7 +27,11 @@ io.on('connection', (socket) => {
 
     socket.on('created room', (data) => {
         rooms.set(data.roomId, data.movies);
-        io.to(data.roomId).emit('send content', data.movies);
+        if (typeof data.movies === 'string') {
+            io.to(data.roomId).emit('server error', data.movies);
+        } else {
+            io.to(data.roomId).emit('send content', data.movies);
+        }
     });
 
     socket.on('connected', (roomId) => {
@@ -81,6 +85,6 @@ app.get('/get-most-popular-imdb', (req, res) => {
 
 app.get('/get-in-theaters-imdb', (req, res) => {
     axios.get(`https://imdb-api.com/en/API/InTheaters/${IMDB_API_KEY}`)
-        .then(({ data }) => res.send(data.items))
+        .then(({ data }) => res.send(data.items.length ? data.items : data.errorMessage))
         .catch((err) => console.log(err));
 });
