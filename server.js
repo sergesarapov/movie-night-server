@@ -26,11 +26,11 @@ io.on('connection', (socket) => {
     console.log('Opened Socket Connection', socket.id);
 
     socket.on('created room', (data) => {
-        rooms.set(data.roomId, data.movies);
-        if (typeof data.movies === 'string') {
-            io.to(data.roomId).emit('server error', data.movies);
+        rooms.set(data.roomId, data.movies.items);
+        if (data.movies.errorMessage) {
+            io.to(data.roomId).emit('server error', data.movies.errorMessage);
         } else {
-            io.to(data.roomId).emit('send content', data.movies);
+            io.to(data.roomId).emit('send content', data.movies.items);
         }
     });
 
@@ -72,19 +72,19 @@ app.get('/get-top100-imdb', (req, res) => {
     axios.get(`https://imdb-api.com/en/API/Top250Movies/${IMDB_API_KEY}`)
         .then(({ data }) => {
             data.items.splice(100, Infinity);
-            res.send(data.items.length ? data.items : data.errorMessage);
+            res.send(data);
         })
         .catch((err) => console.log(err));
 });
 
 app.get('/get-most-popular-imdb', (req, res) => {
     axios.get(`https://imdb-api.com/en/API/MostPopularMovies/${IMDB_API_KEY}`)
-        .then(({ data }) => res.send(data.items.length ? data.items : data.errorMessage))
+        .then(({ data }) => res.send(data))
         .catch((err) => console.log(err));
 });
 
 app.get('/get-in-theaters-imdb', (req, res) => {
     axios.get(`https://imdb-api.com/en/API/InTheaters/${IMDB_API_KEY}`)
-        .then(({ data }) => res.send(data.items.length ? data.items : data.errorMessage))
+        .then(({ data }) => res.send(data))
         .catch((err) => console.log(err));
 });
