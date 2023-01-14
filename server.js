@@ -78,3 +78,9 @@ app.get('/get-most-popular-imdb', (req, res) => {
         .then(({ data }) => res.send(data.items))
         .catch((err) => console.log(err));
 });
+
+app.get('/get-in-theaters-imdb', (req, res) => {
+    axios.get(`https://imdb-api.com/en/API/InTheaters/${IMDB_API_KEY}`)
+        .then(({ data }) => res.send(data.items))
+        .catch((err) => console.log(err));
+});
